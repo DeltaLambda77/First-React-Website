@@ -1,4 +1,8 @@
 import React from "react"
+import Footer from "./components/Footer"
+import Hero from "./components/Hero"
+import PopularArticles from "./components/PopularArticles"
+import RandomArticle from "./components/RandomArticle"
 
 export default function App() {
     const [newsData, setNewsData] = React.useState()
@@ -16,8 +20,14 @@ export default function App() {
 
         
     return (
-        <div>
-            <h1>{JSON.stringify(newsData)}</h1>
-        </div>
+        <>
+            <Hero />
+            <PopularArticles />
+            <RandomArticle />
+            <Footer />
+            <div>
+                <h1>{JSON.stringify(newsData)}</h1>
+            </div>
+        </>
     )
 }
