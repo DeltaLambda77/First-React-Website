@@ -11,13 +11,15 @@ export default function App() {
     const year = "2021";
     const apiLink = "https://cors-anywhere.herokuapp.com/https://api.nytimes.com/svc/archive/v1/" + year + "/" + month + ".json?api-key=" + apiKey
 
-    console.log(newsData)
+    const date1 = new Date()
+    const realDate = date1.toString()
+
+    console.log(realDate)
     React.useEffect(function getApiData() {
         fetch(apiLink)
             .then(response => response.json())
             .then(data => setNewsData(data.response.docs))
         }, [])
-
         
     return (
         <>
@@ -26,7 +28,7 @@ export default function App() {
             <RandomArticle />
             <Footer />
             <div>
-                <h1>{JSON.stringify(newsData)}</h1>
+                <h1>{/*{JSON.stringify(newsData)}*/}</h1>
             </div>
         </>
     )
