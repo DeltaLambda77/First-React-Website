@@ -26,8 +26,6 @@ export default function Footer() {
                     Contact Me
                 </a>
             </div>
-
-
         </div>
     )
 }

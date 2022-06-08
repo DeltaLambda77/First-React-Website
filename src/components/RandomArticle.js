@@ -3,27 +3,17 @@ import React from "react"
 export default function RandomArticle(props) {
     return (
         <div className="random-article-container">
-            <p>{props.articleSource}</p>
-            <p>{props.articleLeadParagraph}</p>
-            <p>{props.articleImageURL}</p>
-            <p>{props.articleTitle}</p>
-            <p>{props.articleURL}</p>
             <p>{props.articleSection}</p>
-            <p>{props.articleSnippet}</p>
+            <h1><i>{props.articleTitle}</i></h1>
+            <p><i>"{props.articleAbstract}"</i></p>
             <p>{props.articlePublishedDate}</p>
-            <p>{props.articleAbstract}</p>
+            <p>{props.articleLeadParagraph}</p>
+            <img src={`https://static01.nyt.com/` + props.articleImageURL} alt="NYT"></img>
+            <div className="random-articles-footer">
+                <a href={props.articleURL}>Read More:</a>
+                <p>Taken from: {props.articleSource}</p>
+            </div>
         </div>
     )
 }
 
-/* articleAbstract={newsMonthData.articleAbstract}
-                articleLeadParagraph={newsMonthData.articleLeadParagraph}
-                articleImageURL={newsMonthData.articleImageURL}
-                articleTitle={newsMonthData.articleTitle}
-                articleURL={newsMonthData.articleURL}
-                articleSection={newsMonthData.articleSection}
-                articleSnippet={newsMonthData.articleSnippet}
-                articlePublishedDate={newsMonthData.articlePublishedDate}
-                articleSource={newsMonthData.articleSource}
-
-                */
