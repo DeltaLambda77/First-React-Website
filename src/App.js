@@ -5,19 +5,26 @@ import PopularArticles from "./components/PopularArticles"
 import RandomArticle from "./components/RandomArticle"
 
 export default function App() {
-    const [newsMonthData, setNewsMonthData] = React.useState({
+    const [newsMonthData, setNewsMonthData] = React.useState()
+
+    const [newsMonthArticle, setNewsMonthArticle] = React.useState({
         articleAbstract: "",
         articleLeadParagraph: "",
         articleImageURL: "",
         articleTitle: "",
         articleURL: "",
         articleSection: "",
-        articleSnippet: "",
         articlePublishedDate: "",
-        articleSource: ""    
+        articleSource: "",
+        arrayLength: "",
+        arrayPosition: 0,
+        toggleContent: false    
     })
 
-    const [popularNewsData, setPopularNewsData] = React.useState({
+
+    const [popularNewsData, setPopularNewsData] = React.useState()
+
+    const [popularNewsArticle, setPopularNewsArticle] = React.useState({
         articleAbstract: "",
         articlePublishedDate: "",
         articleSection: "",
@@ -25,7 +32,11 @@ export default function App() {
         articleTitle: "",
         articleURL: "",
         articleImageURL: "",
+        arrayLength: "",
+        arrayPosition: 0,
+        toggleContent: false
     })
+
 
     const apiKey = "nGpPAWCw1lOS5eEANJAG6G0O6priTASa";
     const month = "12";
@@ -37,69 +48,95 @@ export default function App() {
     const date1 = new Date()
     const realDate = date1.toString()
 
-    console.log(newsMonthData)
+    console.log(popularNewsData)
 
     React.useEffect(function getApiMonthData() {
         fetch(apiMonthLink)
             .then(response => response.json())
-            .then(data => setNewsMonthData(prevMonthData => ({
-                ...prevMonthData,
-                articleAbstract: data.response.docs[0].abstract,
-                articleLeadParagraph: data.response.docs[0].lead_paragraph,
-                articleImageURL: data.response.docs[0].multimedia[0].url,
-                articleTitle: data.response.docs[0].headline.main,
-                articleURL: data.response.docs[0].web_url,
-                articleSection: data.response.docs[0].section_name,
-                articleSnippet: data.response.docs[0].snippet,
-                articlePublishedDate: data.response.docs[0].pub_date,
-                articleSource: data.response.docs[0].source,
-            }))
-            )
-    }, [])
+            .then(data => setNewsMonthData(prevData => data))
+    }, [newsMonthData])
     
     React.useEffect(function getPopular() {
         fetch(apiPopularLink)
             .then(response => response.json())
-            .then(data => setPopularNewsData(prevNewsData => ({
-                ...prevNewsData,
-                articleAbstract: data.results[0].abstract,
-                articlePublishedDate: data.results[0].published_date,
-                articleSection: data.results[0].section,
-                articleSource: data.results[0].source,
-                articleTitle: data.results[0].title,
-                articleURL: data.results[0].url,
-                articleImageURL: data.results[0].media[0]["media-metadata"][2].url
-                }))
-            )
-    }, [])
+            .then(data => setPopularNewsData(prevData => data))
+    }, [popularNewsData])
+
+    function loadMonthContent() {
+        setNewsMonthArticle(prevMonthArticle => ({
+            ...prevMonthArticle,
+            articleAbstract: newsMonthData.response.docs[0].abstract,
+            articleLeadParagraph: newsMonthData.response.docs[0].leadparagraph,
+            articleImageURL: newsMonthData.response.docs[0].multimedia[0].url,
+            articleTitle: newsMonthData.response.docs[0].headline.main,
+            articleURL: newsMonthData.response.docs[0].web_url,
+            articleSection: newsMonthData.response.docs[0].section_name,
+            articlePublishedDate: newsMonthData.response.docs[0].pub_date,
+            articleSource: newsMonthData.response.docs[0].source,
+            arrayLength: newsMonthData.response.docs.length,
+            arrayPosition: 0,
+            toggleContent: true    
+        }))
+    }
+   
+    function loadPopularContent() {
+        setPopularNewsArticle(prevPopularArticle => ({
+            ...prevPopularArticle,
+            articleAbstract: popularNewsData.results[0].abstract,
+            articlePublishedDate: popularNewsData.results[0].published_date,
+            articleSection: popularNewsData.results[0].section,
+            articleSource: popularNewsData.results[0].source,
+            articleTitle: popularNewsData.results[0].title,
+            articleURL: popularNewsData.results[0].url,
+            articleImageURL: popularNewsData.results[0].media[0]["media-metadata"][2].url,
+            arrayLength: popularNewsData.results.length,
+            arrayPosition: 0,
+            toggleContent: true
+        }))
+    }
+/*
+    function randomPopularArticle() {
+        const randomNumber = Math.floor(Math.Random() * popularNewsArticle.arrayLength)
+        setPopularNewsData(prevNewsData => ({
+            ...prevNewsData,
+            articleAbstract: data.results[randomNumber].abstract,
+            articlePublishedDate: data.results[randomNumber].published_date,
+            articleSection: data.results[randomNumber].section,
+            articleSource: data.results[randomNumber].source,
+            articleTitle: data.results[randomNumber].title,
+            articleURL: data.results[randomNumber].url,
+            articleImageURL: data.results[randomNumber].media[0]["media-metadata"][2].url,
+        }))
+    }*/
 
     return (
         <>
             <Hero />
             <PopularArticles 
-                articleAbstract={popularNewsData.articleAbstract}
-                articlePublishedData={popularNewsData.articlePublishedData}
-                articleSection={popularNewsData.articleSection}    
-                articleSource={popularNewsData.articleSource}
-                articleTitle={popularNewsData.articleTitle}
-                articleURL={popularNewsData.articleURL}
-                articleImageURL={popularNewsData.articleImageURL}
+                articleAbstract={popularNewsArticle.articleAbstract}
+                articlePublishedData={popularNewsArticle.articlePublishedData}
+                articleSection={popularNewsArticle.articleSection}    
+                articleSource={popularNewsArticle.articleSource}
+                articleTitle={popularNewsArticle.articleTitle}
+                articleURL={popularNewsArticle.articleURL}
+                articleImageURL={popularNewsArticle.articleImageURL}
+                toggleContent={popularNewsArticle.toggleContent}
+                loadPopularContent={loadPopularContent()}
             />
             <RandomArticle 
-                articleAbstract={newsMonthData.articleAbstract}
-                articleLeadParagraph={newsMonthData.articleLeadParagraph}
-                articleImageURL={newsMonthData.articleImageURL}
-                articleTitle={newsMonthData.articleTitle}
-                articleURL={newsMonthData.articleURL}
-                articleSection={newsMonthData.articleSection}
-                articleSnippet={newsMonthData.articleSnippet}
-                articlePublishedDate={newsMonthData.articlePublishedDate}
-                articleSource={newsMonthData.articleSource}
+                articleAbstract={newsMonthArticle.articleAbstract}
+                articleLeadParagraph={newsMonthArticle.articleLeadParagraph}
+                articleImageURL={newsMonthArticle.articleImageURL}
+                articleTitle={newsMonthArticle.articleTitle}
+                articleURL={newsMonthArticle.articleURL}
+                articleSection={newsMonthArticle.articleSection}
+                articleSnippet={newsMonthArticle.articleSnippet}
+                articlePublishedDate={newsMonthArticle.articlePublishedDate}
+                articleSource={newsMonthArticle.articleSource}
+                toggleContent={newsMonthArticle.toggleContent}
+                loadMonthContent={loadMonthContent()}
             />
-            <Footer />
-            <div>
-                <h1>{/*{JSON.stringify(newsMonthData)}*/}</h1>
-            </div>
+            <Footer /> 
         </>
     )
 }
